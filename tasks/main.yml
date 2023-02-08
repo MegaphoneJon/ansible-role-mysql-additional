@@ -1,0 +1,15 @@
+- name: Update timezone info
+  tags: [ timezone-update ]
+  apt:
+    name: tzdata
+    state: latest
+    install_recommends: no
+  register: timezone_info
+
+- name: Move system timezone info into MariaDB
+  tags: [ timezone-update ]
+  shell: >
+    mysql_tzinfo_to_sql /usr/share/zoneinfo \
+      | grep -v "^Warning" \
+      | mysql --database=mysql
+  when: timezone_info.changed
