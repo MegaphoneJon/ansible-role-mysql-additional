@@ -1,3 +1,19 @@
+- name: Create a MariaDB systemctl override folder
+  ansible.builtin.file:
+    state: directory
+    path: /etc/systemd/system/mariadb.service.d
+    owner: root
+    group: root
+
+- name: Always restart MySQL when it crashes
+  ansible.builtin.copy:
+    src: files/override.conf
+    dest: /etc/systemd/system/mariadb.service.d/override.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: systemctl daemon-reload
+
 - name: Update timezone info
   tags: [ timezone-update ]
   apt:
