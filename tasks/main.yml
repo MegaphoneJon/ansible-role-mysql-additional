@@ -14,6 +14,15 @@
     mode: '0644'
   notify: systemctl daemon-reload
 
+- name: Set up READ-COMMITTED isolation level
+  ansible.builtin.copy:
+    src: files/mysqld.cnf
+    dest: /etc/mysql/conf.d/mysqld.cnf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart mysql
+
 - name: Update timezone info
   tags: [ timezone-update ]
   apt:
