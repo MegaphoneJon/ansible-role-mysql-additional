@@ -5,7 +5,7 @@
     owner: root
     group: root
 
-- name: Always restart MySQL when it crashes
+- name: Always restart MySQL when it crashes, tell oom-killer to back off
   ansible.builtin.copy:
     src: files/override.conf
     dest: /etc/systemd/system/mariadb.service.d/override.conf
