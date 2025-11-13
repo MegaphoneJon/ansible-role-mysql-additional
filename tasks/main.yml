@@ -37,4 +37,12 @@
     mysql_tzinfo_to_sql /usr/share/zoneinfo \
       | grep -v "^Warning" \
       | mysql --database=mysql
-  when: timezone_info.changed
+  when: timezone_info.changed and ansible_os_family == 'Debian' and ansible_distribution_major_version | int == 12
+
+- name: Move system timezone info into MariaDB
+  tags: [ timezone-update ]
+  shell: >
+    mariadb-tzinfo-to-sql /usr/share/zoneinfo \
+      | grep -v "^Warning" \
+      | mysql --database=mysql
+  when: timezone_info.changed and ansible_os_family == 'Debian' and ansible_distribution_major_version | int == 13
